@@ -1,15 +1,48 @@
 version: '3.1'
 services:
-  stats-server:
-    ports:
-      - "9090:9090"
 
   stats-db:
     image: postgres:14-alpine
-
-  ewm-service:
+    container_name: ewm-stats-db
     ports:
-      - "8080:8080"
+      - "6542:5432"
+    environment:
+      - POSTGRES_DB=stats-db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
 
-  ewm-db:
-    image: postgres:14-alpine
+  stats-server:
+    build: ./stats-service/server
+    image: stats-server-image
+    container_name: ewm-stats-server
+    ports:
+      - "9090:9090"
+    depends_on:
+      - stats-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+  #  event-db:
+  #    image: postgres:14-alpine
+  #    container_name: events_postgres_container
+  #    ports:
+  #      - "6542:5432"
+  #    environment:
+  #      - POSTGRES_DB=event-db
+  #      - POSTGRES_USER=iameventroot
+  #      - POSTGRES_PASSWORD=iameventroot
+
+#  event-service:
+#    build: ./event-service
+#    image: event_server_image
+#    container_name: event_server_container
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - event-db
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/event-db
+#      - SPRING_DATASOURCE_USERNAME=iameventroot
+#      - SPRING_DATASOURCE_PASSWORD=iameventroot
+#      - STATS_SERVER_URL=http://localhost:9090
