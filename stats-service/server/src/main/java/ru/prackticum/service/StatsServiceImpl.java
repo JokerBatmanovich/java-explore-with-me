@@ -1,7 +1,7 @@
 package ru.prackticum.service;
 
 import lombok.RequiredArgsConstructor;
-import ru.prackticum.HitMapper;
+import ru.prackticum.model.HitMapper;
 import ru.prackticum.dto.ViewStats;
 import ru.prackticum.model.Hit;
 import ru.prackticum.repository.HitRepository;
@@ -18,9 +18,8 @@ public class StatsServiceImpl implements StatsService {
     final HitMapper hitMapper;
 
     @Override
-    public void add(HitToGetDto hitToGetDto) {
-        Hit savedHit = hitRepository.save(hitMapper.toEntity(hitToGetDto));
-        System.out.println(savedHit);
+    public Hit add(HitToGetDto hitToGetDto) {
+        return hitRepository.save(hitMapper.toEntity(hitToGetDto));
     }
 
     @Override
@@ -40,5 +39,10 @@ public class StatsServiceImpl implements StatsService {
         } else {
             return hitRepository.getStatsWithoutUrisWithUniqueIp(start, end);
         }
+    }
+
+    @Override
+    public int getViews(String uri, String app) {
+        return hitRepository.getViews(uri, app);
     }
 }

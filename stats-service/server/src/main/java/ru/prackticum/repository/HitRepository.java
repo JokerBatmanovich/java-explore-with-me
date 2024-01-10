@@ -29,4 +29,7 @@ public interface HitRepository extends JpaRepository<Hit,Long> {
             "from Hit h where h.timestamp between (:start) and (:end) " +
             "group by h.ip, h.uri, h.app order by count(h.ip) desc")
     List<ViewStats> getStatsWithoutUrisWithUniqueIp (LocalDateTime start, LocalDateTime end);
+
+    @Query("select count(distinct h.ip) from Hit h where h.uri like :uri and h.app like :app")
+    int getViews(String uri, String app);
 }
