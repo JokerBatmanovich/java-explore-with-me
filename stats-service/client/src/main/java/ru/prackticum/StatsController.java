@@ -1,18 +1,17 @@
 package ru.prackticum;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriUtils;
 import ru.prackticum.dto.HitToGetDto;
 import ru.prackticum.exception.IllegalParamException;
 
-import java.nio.charset.StandardCharsets;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @RestController
@@ -21,25 +20,20 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class StatsController {
+
     private final StatsClient statsClient;
-    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping("/stats")
-    public ResponseEntity<Object> getStats(@RequestParam(name = "start") String startParam,
-                                    @RequestParam(name = "end") String endParam,
-                                    @RequestParam(name = "uris", required = false, defaultValue = "") String[] uris,
+    public ResponseEntity<Object> getStats(@RequestParam(name = "start")
+                                               @DateTimeFormat(pattern = "yyy-MM-dd HH-mm-ss")
+                                               @JsonFormat(pattern = "yyy-MM-dd HH-mm-ss") LocalDateTime startParam,
+                                    @RequestParam(name = "end")
+                                        @DateTimeFormat(pattern = "yyy-MM-dd HH-mm-ss")
+                                        @JsonFormat(pattern = "yyy-MM-dd HH-mm-ss") LocalDateTime endParam,
+                                    @RequestParam(name = "uris", defaultValue = "") String[] uris,
                                     @RequestParam(name = "unique", required = false) String uniqueParam) {
         log.info("Get stats: start={}, end={}, uris={}, unique={}", startParam, endParam, uris, uniqueParam);
-        try {
-            LocalDateTime.parse(UriUtils.decode(startParam, StandardCharsets.UTF_8), formatter);
-        } catch (DateTimeException e) {
-            throw new IllegalParamException("start", startParam);
-        }
-        try {
-            LocalDateTime.parse(UriUtils.decode(endParam, StandardCharsets.UTF_8), formatter);
-        } catch (DateTimeException e) {
-            throw new IllegalParamException("end", endParam);
-        }
+
         try {
             Boolean.parseBoolean(uniqueParam);
         } catch (DateTimeException e) {

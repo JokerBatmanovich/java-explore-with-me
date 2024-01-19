@@ -25,12 +25,16 @@ public class StatsClient {
                         .build();
     }
 
-    protected ResponseEntity<Object> getStats(Map<String, Object> parameters) {
+    public ResponseEntity<Object> getStats(Map<String, Object> parameters) {
         return makeAndSendRequest(HttpMethod.GET, "/stats?start={start}&end={end}&uris={uris}&unique={unique)", parameters, null);
     }
 
-    protected ResponseEntity<Object> add(Object body) {
+    public ResponseEntity<Object> add(Object body) {
         return makeAndSendRequest(HttpMethod.POST, "/hit", null, body);
+    }
+
+    public ResponseEntity<Object> getViews(Map<String, Object> parameters) {
+        return makeAndSendRequest(HttpMethod.GET, "/views?uri={uri}&app={app}", parameters,null);
     }
 
     private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method,
