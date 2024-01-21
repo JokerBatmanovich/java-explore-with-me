@@ -38,6 +38,13 @@ public class ErrorHandler {
         return buildResponse(HttpStatus.NOT_FOUND, error);
     }
 
+    @ExceptionHandler(CommentNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleCommentNotFoundException(final CommentNotFoundException error) {
+        log.info("Comment not found: {}", error.getMessage());
+        return buildResponse(HttpStatus.NOT_FOUND, error);
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(final ConstraintViolationException error) {
@@ -95,9 +102,9 @@ public class ErrorHandler {
         return buildResponse(HttpStatus.CONFLICT, error);
     }
 
-    @ExceptionHandler(IncorrectRangeParameterException.class)
+    @ExceptionHandler(IncorrectParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleIncorrectRangeParameterException(final IncorrectRangeParameterException error) {
+    public ErrorResponse handleIncorrectParameterException(final IncorrectParameterException error) {
         log.info("Bad request: {}", error.getMessage());
         return buildResponse(HttpStatus.BAD_REQUEST, error);
     }
