@@ -17,7 +17,9 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getById(Long id) {
         try {
-            return userRepository.getReferenceById(id);
+            User user = userRepository.getReferenceById(id);
+            System.out.println(user);
+            return user;
         } catch (EntityNotFoundException e) {
             throw new UserNotFoundException(id);
         }

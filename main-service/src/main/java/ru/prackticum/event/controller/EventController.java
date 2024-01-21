@@ -139,7 +139,8 @@ public class EventController {
         Event event = eventService.getById(eventId);
 
         if (!Objects.equals(event.getInitiator().getId(), userId)) {
-            throw new NoPermissionsException(userId, eventId);
+            throw new NoPermissionsException(String.format("У пользователя с ID=%d нет прав " +
+                    "на редактирование события с ID=%d", userId, eventId));
         }
 
         if (event.getState() == State.PUBLISHED) {
@@ -200,7 +201,7 @@ public class EventController {
 
         if (eventFilter.getRangeStart() != null && eventFilter.getRangeEnd() != null) {
             if (eventFilter.getRangeStart().isAfter(eventFilter.getRangeEnd())) {
-                throw new IncorrectRangeParameterException("rangeStart не может быть позже rangeEnd");
+                throw new IncorrectParameterException("rangeStart не может быть позже rangeEnd");
             }
         }
 
@@ -246,7 +247,7 @@ public class EventController {
 
         if (eventFilter.getRangeStart() != null && eventFilter.getRangeEnd() != null) {
             if (eventFilter.getRangeStart().isAfter(eventFilter.getRangeEnd())) {
-                throw new IncorrectRangeParameterException("rangeStart не может быть позже rangeEnd");
+                throw new IncorrectParameterException("rangeStart не может быть позже rangeEnd");
             }
         }
 
