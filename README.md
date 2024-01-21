@@ -2,6 +2,7 @@
 
 ### Pull-request: (https://github.com/JokerBatmanovich/java-explore-with-me/pull/6)
 
+
 ### Endpoints
 
 | METHOD       | URI                                                                     | DESCRIPTION                                              | REQUEST CLASS       | RESPONSE CLASS              |
